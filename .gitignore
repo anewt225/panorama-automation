@@ -1,0 +1,21 @@
+# photo library / batch outputs (never commit the actual photos)
+*.NEF
+*.xmp
+*_original
+Panos/
+pano_batch*.log
+pano_batch_work/
+phone_track*.gpx
+
+# keep the docs/ portfolio images, ignore stray photos elsewhere
+/*.jpg
+/*.JPG
+/*.tif
+/*.tiff
+!docs/**
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
