@@ -13,7 +13,7 @@ The transferable takeaway isn't the photos. It's a documented example of **worki
 ---
 
 ## The problem (Situation)
-Two weeks of travel (Netherlands → Norway) produced ~1,750 Nikon D610 raw+JPEG pairs. Two things made them nearly useless for search, mapping, or sharing:
+Two weeks of travel (Netherlands → Norway) produced 1,197 Nikon D610 raw+JPEG pairs (2,394 files). Two things made them nearly useless for search, mapping, or sharing:
 
 1. **Every timestamp was wrong.** The camera clock had been left on U.S. Central time. The *instant* each photo was taken was correct, but the *timezone label* was off by 7 hours — so photos sorted wrong and wouldn't line up with anything else.
 2. **No location data.** The DSLR has no GPS. None of the photos were geotagged.

@@ -26,8 +26,36 @@ Two weeks of travel photos came home with the wrong timezone on every file, no l
 
 The constraints I set up front shaped the whole design: never touch the phone photos, keep every step reversible, verify against ground truth, and make it re-runnable for the next trip.
 
+## What this shows
+
+This is a small project, but it uses the same skills I bring to operations and AI-enablement work:
+
+- **Write the requirements before building.** Four written constraints decided most of the design before any code existed. That's the same step as writing down the operating rules before a rollout, and it's what kept the agent from filling gaps with plausible guesses.
+- **Hand off the mechanics, keep the quality bar.** The agent wrote all the code. Deciding what "done" meant, and rejecting work that ran but looked wrong, stayed with me. That split is what a team needs to adopt AI tools without lowering its standards.
+- **Measure before processing at scale.** Two short triage scripts read exposure and clipping from the raw files before anything was stitched. That changed the approach (shadow recovery, not HDR) and saved a batch of wasted work. In operations terms: run the pilot before the rollout.
+- **Fail visibly.** A panorama the stitcher can't solve gets flagged for a person to finish. It never ships broken. The same rule applies to any automated process that people downstream depend on.
+
 ## How it works
-![pipeline](docs/pipeline_diagram.png)
+
+```mermaid
+flowchart LR
+    subgraph inputs[Inputs]
+        D[DSLR raw + JPEG<br/>wrong timezone, no GPS]
+        P[Phone photos<br/>GPS in EXIF]
+        T[Google Timeline<br/>export]
+    end
+    D --> S1[1 · Time repair<br/>ExifTool, +7 h, stamp +02:00<br/>preview, confirm, backups]
+    P --> TRK[GPX track]
+    T -. fallback .-> TRK
+    S1 --> S2[2 · Geotag<br/>time-match to track]
+    TRK --> S2
+    S2 --> S3[3 · Gap-fill<br/>place identified from the photo<br/>neighborhood-level coordinates]
+    S3 --> OUT1[(2,394 files<br/>time-corrected + geotagged)]
+    D --> TRI[Triage<br/>exposure spread + clipping<br/>read from raw]
+    TRI --> S4[4 · Panoramas<br/>develop from raw, luminance-only tone curve<br/>Hugin stitch, projection chosen by field of view]
+    S4 -->|solved| OUT2[(35 of 38 panoramas)]
+    S4 -->|too few control points| FLAG[Flagged for manual<br/>finishing in Hugin]
+```
 
 | Stage | Tool | What happens |
 |---|---|---|
